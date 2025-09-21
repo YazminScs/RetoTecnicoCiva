@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.retotecnico.Reto.Tecnico.modelo.MarcaBus;
@@ -19,6 +20,7 @@ public class MarcaBusControlador {
     private MarcaBusServicio marcaBusService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MarcaBus> createMarca(@RequestBody MarcaBus marca) {
         MarcaBus nuevaMarca = marcaBusService.saveMarca(marca);
         return ResponseEntity.ok(nuevaMarca);
@@ -37,6 +39,7 @@ public class MarcaBusControlador {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MarcaBus> updateMarca(@PathVariable Long id, @RequestBody MarcaBus marca) {
         Optional<MarcaBus> existente = marcaBusService.findMarcaById(id);
         if (existente.isPresent()) {
@@ -47,8 +50,8 @@ public class MarcaBusControlador {
         }
     }
 
-    // DELETE
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteMarca(@PathVariable Long id) {
         if (marcaBusService.findMarcaById(id).isPresent()) {
             marcaBusService.deleteMarca(id);
